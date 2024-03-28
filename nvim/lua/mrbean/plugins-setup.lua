@@ -56,6 +56,9 @@ return packer.startup(function(use)
   use('mbbill/undotree')
   use("github/copilot.vim")
 
+  -- use('neovim/nvim-lspconfig')
+  use({'neoclide/coc.nvim', branch = "release"})
+
 	if packer_bootstrap then
 		require("packer").sync()
 	end

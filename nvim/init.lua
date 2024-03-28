@@ -6,6 +6,7 @@ require("mrbean.plugins.comment")
 require("mrbean.plugins.nvim-tree")
 require("mrbean.plugins.lualine")
 require("mrbean.plugins.telescope")
+-- require'lspconfig'.pyright.setup{}
 
 local undodir = vim.fn.expand('~/.undodir')
 

@@ -17,7 +17,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="agnoster_diy"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -110,6 +111,32 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+function set_tmux_title () {
+    printf '\033]2;'"$1"'\033\\'
+}
+ 
+function auto_tmux_title() {
+    emulate -L zsh
+    printf '\033]2;'"${PWD:t}"'\033\\'
+}
+ 
+auto_tmux_title
+chpwd_functions=(${chpwd_functions[@]} "auto_tmux_title")
+
+# innerpeace
+export PATH=${PATH}:~/innerpeace/bin
+export PATH="/Applications/CMake.app/Contents/bin:$PATH"
+alias vi="nvim"
+alias cls='clear'
+alias gcm='git commit'
+alias srzsh='source ~/.zshrc'
+alias vizsh='nvim ~/.zshrc'
+
+
+# mac
+alias cpwd='function lsf() {python3 -c "import os,sys; print(os.path.realpath(sys.argv[1] if len(sys.argv)==2 else \".\"),end=\"\")" $1};function _cpwd(){echo `lsf $1` | pbcopy && echo `pbpaste`}; _cpwd'
+
+bindkey '^b' forward-word
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -131,6 +158,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-#eval "$(github-copilot-cli alias -- "$0")"
-
-
+eval "$(github-copilot-cli alias -- "$0")"

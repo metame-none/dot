@@ -59,6 +59,26 @@ return packer.startup(function(use)
   -- use('neovim/nvim-lspconfig')
   use({'neoclide/coc.nvim', branch = "release"})
 
+  -- extra
+	use('tpope/vim-commentary')
+	use('tell-k/vim-autopep8')
+	use({'heavenshell/vim-pydocstring', run = 'make install' })
+	use('freitass/todo.txt-vim')
+	use('hynek/vim-python-pep8-indent')
+	use('hdima/python-syntax')
+	use('airblade/vim-gitgutter')
+	use('kien/rainbow_parentheses.vim')
+	use({'ojroques/vim-oscyank', branch= 'main'})
+	use('ervandew/supertab')
+	use('kien/ctrlp.vim')
+	use('Yggdroot/indentLine')
+	use('Valloric/MatchTagAlways')
+	use('zaiste/tmux.vim')
+	use('bigeagle/molokai')
+	use('jiangmiao/auto-pairs')
+	use('majutsushi/tagbar')
+	use('bling/vim-airline')
+
 	if packer_bootstrap then
 		require("packer").sync()
 	end

@@ -72,8 +72,8 @@ create_symbolic_links() {
     ln -sfn "$DIR/.zshrc" "$HOME/.zshrc"
     ln -sfn "$DIR/.tmux.conf" "$HOME/.tmux.conf"
     ln -sfn "$DIR/nvim" "$HOME/.config/nvim"
-    ln -sfn "$DIR/.p10k.zsh" "$HOME/.p10k.zsh"
-    ln -sfn "$DIR/agnoster_diy.zsh-theme $HOME/.oh-my-zsh/themes/
+    # ln -sfn "$DIR/.p10k.zsh" "$HOME/.p10k.zsh"
+    ln -sfn "$DIR/agnoster_diy.zsh-theme $HOME/.oh-my-zsh/themes/"
 }
 
 # Clone the zsh-syntax-highlighting plugin
@@ -128,6 +128,11 @@ install_copilot_cli() {
     npm install -g @githubnext/github-copilot-cli
 }
 
+# Install neovim plugins
+setup_neovim() {
+    nvim -c 'PackerSync' -c 'CocInstall coc-json coc-pyright'
+}
+
 main() {
     # Check if Homebrew is installed, install if not
     if ! command -v brew >/dev/null; then
@@ -135,13 +140,13 @@ main() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    # update_and_upgrade
-    # install_zsh
-    # install_oh_my_zsh
-    # install_miniconda
+    update_and_upgrade
+    install_zsh
+    install_oh_my_zsh
+    install_miniconda
     install_latest_nodejs_and_npm
-    # install_tmux
-    # install_neovim
+    install_tmux
+    install_neovim
     create_symbolic_links
     install_zsh_syntax_highlighting
     install_zsh_autosuggestions
@@ -149,8 +154,9 @@ main() {
     install_tpm
     source_zsh_config
     reload_tmux_config
-    install_github_copilot
-    install_copilot_cli
+    # install_github_copilot
+    # install_copilot_cli
+    setup_neovim
 }
 
 main

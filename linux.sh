@@ -1,17 +1,24 @@
 #!/bin/zsh
 
+# Change apt source to Tsinghua
+change_apt_source() {
+    echo "Changing apt source to Tsinghua University..."
+    cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    cp $DIR/sources.list /etc/apt/sources.list
+}
+
 update_and_upgrade() {
     echo "Updating package lists..."
-    sudo apt-get update -y
+    apt-get update -y
     echo "Upgrading installed packages..."
-    sudo apt-get upgrade -y
+    apt-get upgrade -y
     echo "installing cmake..." 
-    sudo apt install build-essential cmake -y
+    apt install build-essential cmake -y
 }
 
 # Install zsh and make it your main shell
 install_zsh() {
-    sudo apt install -y zsh
+    apt install -y zsh
     chsh -s $(which zsh)
 }
 
@@ -34,15 +41,15 @@ install_latest_nodejs_and_npm() {
     NODE_MAJOR=20  # Replace with desired version (e.g., 16, 18, 20, 21)
 
     # Update system package list and install prerequisites
-    sudo apt-get update && sudo apt-get install -y ca-certificates curl gnupg
+    apt-get update && apt-get install -y ca-certificates curl gnupg
 
     # Set up the NodeSource repository
-    sudo mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
     # Install Node.js and update npm to the latest version
-    sudo apt-get update && sudo apt-get install -y nodejs && sudo npm install -g npm@latest
+    apt-get update && apt-get install -y nodejs && npm install -g npm@latest
 
     # Verify the installation
     echo "Node.js $(node --version) and npm $(npm --version) have been installed successfully."
@@ -51,19 +58,27 @@ install_latest_nodejs_and_npm() {
 
 # Install TMUX
 install_tmux() {
-    sudo apt install -y tmux
+    apt install -y tmux
 }
 
 # Install Neovim from the unstable PPA
 install_neovim() {
     # Add the official Neovim 'unstable' PPA
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    add-apt-repository -y ppa:neovim-ppa/unstable
     
     # Update the package lists
-    sudo apt update
+    apt update
     
     # Install Neovim
-    sudo apt install -y neovim
+    apt install -y neovim
+}
+
+# Install Neovim from binary
+install_neovim_from_binary() {
+    # Download the latest release of Neovim
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    rm -rf /opt/nvim
+    tar -C /opt -xzf nvim-linux64.tar.gz
 }
 
 # Create symbolic links
@@ -81,6 +96,7 @@ create_symbolic_links() {
     ln -sfn "$DIR/.tmux.conf" "$HOME/.tmux.conf"
     ln -sfn "$DIR/nvim" "$HOME/.config/nvim"
     ln -sfn "$DIR/.p10k.zsh" "$HOME/.p10k.zsh"
+    ln -sfn "$DIR/agnoster_diy.zsh-theme $HOME/.oh-my-zsh/themes/"
 }
 
 # Clone the zsh-syntax-highlighting plugin
@@ -132,26 +148,34 @@ install_github_copilot() {
 # Install GitHub Copilot CLI
 install_copilot_cli() {
     echo "Installing GitHub Copilot CLI..."
-    sudo npm install -g @githubnext/github-copilot-cli
+    npm install -g @githubnext/github-copilot-cli
+}
+
+# Install neovim plugins
+setup_neovim() {
+    nvim -c 'PackerSync' -c 'CocInstall coc-json coc-pyright'
 }
 
 main() {
+    change_apt_source
     update_and_upgrade
     install_zsh
     install_oh_my_zsh
     install_miniconda
     install_latest_nodejs_and_npm
     install_tmux
-    install_neovim
+    # install_neovim
+    install_neovim_from_binary
     create_symbolic_links
     install_zsh_syntax_highlighting
     install_zsh_autosuggestions
-    install_powerlevel10k
+    # install_powerlevel10k
     install_tpm
     source_zsh_config
     reload_tmux_config
-    install_github_copilot
-    install_copilot_cli
+    # install_github_copilot
+    # install_copilot_cli
+    setup_neovim
 }
 
 main

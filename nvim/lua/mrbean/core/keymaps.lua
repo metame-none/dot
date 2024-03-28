@@ -24,6 +24,40 @@ keymap.set("n", "<leader>tp", ":tabp<CR>") --  go to previous tab
 keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
 
+-- diy settingsh
+
+keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>")  
+keymap.set("n", "<leader>e", "$")
+keymap.set("v", "<leader>e", "$")
+
+keymap.set("n", "<leader>q", ":q<CR>")
+keymap.set("n", "<leader>w", ":w<CR>")
+-- keymap.set("n", "<leader>it", ":r! date '+\%Y-\%m-\%d \%H:\%M:\%S'<CR>")
+keymap.set("n", "<leader>hl", ":set hlsearch! hlsearch?<CR>")
+
+keymap.set("n", "<leader>y", '"+y')
+keymap.set("n", "<leader>p", '"+p')
+keymap.set("n", "<leader>y", ':OSCYankVisual<CR>')
+
+keymap.set("n", "T", ':tabnew<cr>')
+
+-- "swift tab
+keymap.set("n", "<C-t>n", ":tabnew<CR>")
+keymap.set("n", "<C-t>n", ":tabnew<CR>")
+keymap.set("n", "<C-t>l", ":tabnext<CR>")
+keymap.set("n", "<C-t>h", ":tabprevious<CR>")
+keymap.set("n", "<C-t>c", ":tabclose<CR>")
+
+keymap.set("n", "<leader>1", "1gt<CR>")
+keymap.set("n", "<leader>2", "2gt<CR>")
+keymap.set("n", "<leader>3", "3gt<CR>")
+keymap.set("n", "<leader>4", "4gt<CR>")
+keymap.set("n", "<leader>5", "5gt<CR>")
+keymap.set("n", "<leader>6", "6gt<CR>")
+keymap.set("n", "<leader>7", "7gt<CR>")
+
+-- diy settings --
+
 -- plugin keymaps
 
 -- vim-maximizer 
@@ -33,7 +67,7 @@ keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>")
 keymap.set("n", "<leader>b", ":!black %<CR>")
 
 -- nvim-tree
-keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
+keymap.set("n", "<leader>tt", ":NvimTreeToggle<CR>")
 
 -- telescope
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore

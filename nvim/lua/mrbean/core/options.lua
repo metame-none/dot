@@ -1,5 +1,30 @@
 local opt = vim.opt -- for conciseness
 
+-- diy settings
+opt.modeline = true
+opt.showmatch = true
+-- opt.matchtime = 0
+-- opt.nobackup = true
+-- opt.nowritebackup = true
+-- opt.directory = "~/.nvim/.swapfiles//"
+-- opt.backspace = "indent,eol,start"
+
+-- conceal
+-- opt.conceallevel = 2
+-- opt.concealcursor = ""
+
+-- opt.fenc = "utf-8"
+-- opt.fencs = "utf-8,gbk,gb18030,gb2312,cp936,usc-bom,euc-jp"
+-- opt.enc = "utf-8"
+
+vim.o.showmode = false
+vim.o.laststatus = 2
+vim.g.airline_extensions_tabline_enabled = 0
+vim.g.airline_powerline_fonts = 1
+vim.g.ctrlp_custom_ignore = {
+	dir='__pycache__$', 
+	file='v.(pyc)$'
+}
 
 -- line numbers
 opt.relativenumber = true opt.number = true
@@ -20,13 +45,15 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.hlsearch = false 
 opt.incsearch = true
+opt.autochdir = true
 
 --cursor line 
 opt.cursorline = true
+opt.cursorcolumn = true
 
 --appearance
 opt.termguicolors = true
-opt.background = "dark"
+-- opt.background = "dark"
 opt.signcolumn = "yes"
 
 --backspace
@@ -86,6 +113,7 @@ keyset("n", "[g", "<Plug>(coc-diagnostic-prev)", {silent = true})
 keyset("n", "]g", "<Plug>(coc-diagnostic-next)", {silent = true})
 
 -- GoTo code navigation
+keyset("n", "<leader>g", "<Plug>(coc-definition)", {silent = true})
 keyset("n", "gd", "<Plug>(coc-definition)", {silent = true})
 keyset("n", "gy", "<Plug>(coc-type-definition)", {silent = true})
 keyset("n", "gi", "<Plug>(coc-implementation)", {silent = true})

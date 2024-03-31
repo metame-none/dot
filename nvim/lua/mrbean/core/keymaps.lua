@@ -35,9 +35,10 @@ keymap.set("n", "<leader>w", ":w<CR>")
 -- keymap.set("n", "<leader>it", ":r! date '+\%Y-\%m-\%d \%H:\%M:\%S'<CR>")
 keymap.set("n", "<leader>hl", ":set hlsearch! hlsearch?<CR>")
 
-keymap.set("n", "<leader>y", '"+y')
+-- keymap.set("n", "<leader>y", '"+y')
 keymap.set("n", "<leader>p", '"+p')
 keymap.set("n", "<leader>y", ':OSCYankVisual<CR>')
+keymap.set("v", "<leader>y", ':OSCYankVisual<CR>')
 
 keymap.set("n", "T", ':tabnew<cr>')
 

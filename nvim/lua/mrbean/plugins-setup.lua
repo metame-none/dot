@@ -79,7 +79,6 @@ return packer.startup(function(use)
 	use('majutsushi/tagbar')
 	-- use('bling/vim-airline')
 
-    use('nvim-tree/nvim-web-devicons')
     use('nvim-lualine/lualine.nvim')
 
 	if packer_bootstrap then

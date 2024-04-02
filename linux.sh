@@ -95,6 +95,7 @@ create_symbolic_links() {
     ln -sfn "$DIR/.zshrc" "$HOME/.zshrc"
     ln -sfn "$DIR/.tmux.conf" "$HOME/.tmux.conf"
     ln -sfn "$DIR/nvim" "$HOME/.config/nvim"
+    ln -sfn "$DIR/_exc.py" "$HOME/"
     ln -sfn "$DIR/.p10k.zsh" "$HOME/.p10k.zsh"
     ln -sfn "$DIR/agnoster_diy.zsh-theme" "$HOME/.oh-my-zsh/themes/"
 }

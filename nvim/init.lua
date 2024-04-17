@@ -8,7 +8,9 @@ require("mrbean.plugins.nvim-tree")
 require("mrbean.plugins.lualine")
 require("mrbean.plugins.telescope")
 require("mrbean.plugins.treesitter")
+require("mrbean.plugins.gitsigns")
 -- require'lspconfig'.pyright.setup{}
+
 
 local undodir = vim.fn.expand('~/.undodir')
 

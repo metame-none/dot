@@ -134,7 +134,8 @@ alias vizsh='nvim ~/.zshrc'
 
 
 # mac
-alias cpwd='function lsf() {python3 -c "import os,sys; print(os.path.realpath(sys.argv[1] if len(sys.argv)==2 else \".\"),end=\"\")" $1};function _cpwd(){echo `lsf $1` | pbcopy && echo `pbpaste`}; _cpwd'
+# alias cpwd='function lsf() {python3 -c "import os,sys; print(os.path.realpath(sys.argv[1] if len(sys.argv)==2 else \".\"),end=\"\")" $1};function _cpwd(){echo `lsf $1` | pbcopy && echo `pbpaste`}; _cpwd'
+alias cpwd='function lsf() {python3 -c "import os,sys; print(os.path.realpath(sys.argv[1] if len(sys.argv)==2 else \".\"),end=\"\")" $1};function _cpwd(){echo -n `lsf $1` | pbcopy && echo `pbpaste`}; _cpwd'
 # linux
 # alias cpwd='function lsf() {python3 -c "import os,sys; print(os.path.realpath(sys.argv[1] if len(sys.argv)==2 else \".\"),end=\"\")" $1};function _cpwd(){echo `lsf $1` | rpbcopy}; _cpwd'
 

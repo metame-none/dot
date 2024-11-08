@@ -10,52 +10,86 @@ update_and_upgrade() {
     brew install cmake
 }
 
-# Install zsh and make it your main shell
+# Install zsh if not already installed
 install_zsh() {
-    brew install zsh
-    chsh -s $(which zsh)
+    if ! command -v zsh &> /dev/null; then
+        echo "Installing Zsh..."
+        brew install zsh
+    else
+        echo "Zsh is already installed."
+    fi
+
+    local brew_zsh=$(brew --prefix)/bin/zsh
+    if ! grep -Fxq "$brew_zsh" /etc/shells; then
+        echo "Adding Homebrew Zsh to /etc/shells..."
+        echo "$brew_zsh" | sudo tee -a /etc/shells
+    fi
+
+    if [[ $SHELL != $brew_zsh ]]; then
+        echo "Changing default shell to Homebrew Zsh..."
+        chsh -s "$brew_zsh"
+    else
+        echo "Homebrew Zsh is already the default shell."
+    fi
 }
 
 # Install oh-my-zsh
 install_oh_my_zsh() {
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    if [[ ! -d $HOME/.oh-my-zsh ]]; then
+        echo "Installing Oh My Zsh..."
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    else
+        echo "Oh My Zsh is already installed."
+    fi
 }
 
-# Install Miniconda
 install_miniconda() {
-    local MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
-    local MINICONDA_SCRIPT="Miniconda3-latest-MacOSX-x86_64.sh"
-    
-    # Download Miniconda installation script
-    curl -LO $MINICONDA_URL
+    if [[ ! -d $HOME/miniconda3 ]]; then
+        echo "Installing Miniconda..."
+        local MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
+        local MINICONDA_SCRIPT="Miniconda3-latest-MacOSX-arm64.sh"
 
-    # Run the Miniconda installation script
-    bash $MINICONDA_SCRIPT -b -p $HOME/miniconda3
-
-    # Initialize Miniconda for Zsh
-    $HOME/miniconda3/bin/conda init zsh
-
-    # Remove the installation script
-    rm $MINICONDA_SCRIPT
+        curl -LO $MINICONDA_URL
+        bash $MINICONDA_SCRIPT -b -p $HOME/miniconda3
+        $HOME/miniconda3/bin/conda init zsh
+        rm $MINICONDA_SCRIPT
+    else
+        echo "Miniconda is already installed."
+    fi
 }
 
 # Install Node.js and npm using Homebrew
 install_latest_nodejs_and_npm() {
-    brew install node
+    if ! command -v node &> /dev/null; then
+        echo "Installing Node.js and npm..."
+        brew install node
+    else
+        echo "Node.js is already installed. Updating..."
+        brew upgrade node
+    fi
     npm install -g npm@latest
 
-    # Verify the installation
-    echo "Node.js $(node --version) and npm $(npm --version) have been installed successfully."
+    echo "Node.js $(node --version) and npm $(npm --version) have been installed/updated successfully."
 }
 
-# Install TMUX
+ Install TMUX
 install_tmux() {
-    brew install tmux
+    if ! command -v tmux &> /dev/null; then
+        echo "Installing Tmux..."
+        brew install tmux
+    else
+        echo "Tmux is already installed."
+    fi
 }
 
 # Install Neovim
 install_neovim() {
-    brew install neovim
+    if ! command -v nvim &> /dev/null; then
+        echo "Installing Neovim..."
+        brew install neovim
+    else
+        echo "Neovim is already installed."
+    fi
 }
 
 # Create symbolic links
@@ -79,12 +113,30 @@ create_symbolic_links() {
 
 # Clone the zsh-syntax-highlighting plugin
 install_zsh_syntax_highlighting() {
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    local DEST=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    if [[ ! -d $DEST ]]; then
+        echo "Installing zsh-syntax-highlighting..."
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $DEST
+    else
+        echo "zsh-syntax-highlighting is already installed."
+    fi
 }
 
 # Install zsh-autosuggestions
 install_zsh_autosuggestions() {
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    local DEST=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    if [[ ! -d $DEST ]]; then
+        echo "Installing zsh-autosuggestions..."
+        git clone https://github.com/zsh-users/zsh-autosuggestions $DEST
+    else
+        echo "zsh-autosuggestions is already installed."
+    fi
+}
+
+# Install fzf
+install_fzf() {
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
 }
 
 # Install powerlevel10k theme
@@ -94,7 +146,13 @@ install_powerlevel10k() {
 
 # Install Tmux Plugin Manager
 install_tpm() {
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    local DEST=$HOME/.tmux/plugins/tpm
+    if [[ ! -d $DEST ]]; then
+        echo "Installing Tmux Plugin Manager..."
+        git clone https://github.com/tmux-plugins/tpm $DEST
+    else
+        echo "Tmux Plugin Manager is already installed."
+    fi
 }
 
 # Source the new zsh configuration
@@ -103,12 +161,16 @@ source_zsh_config() {
 }
 
 reload_tmux_config() {
-    if tmux list-sessions &> /dev/null; then
-        tmux source ~/.tmux.conf
+    if command -v tmux &> /dev/null; then
+        echo "Reloading Tmux configuration..."
+        if tmux list-sessions &> /dev/null; then
+            tmux source $HOME/.tmux.conf
+            ~/.tmux/plugins/tpm/scripts/install_plugins.sh
+        else
+            echo "No active Tmux sessions. Configuration will be loaded on next Tmux start."
+        fi
     else
-        echo "tmux server not running. Starting a new one and reloading configuration."
-        tmux new-session -d
-        tmux source ~/.tmux.conf
+        echo "Tmux is not installed. Skipping configuration reload."
     fi
 }
 
@@ -151,7 +213,8 @@ main() {
     create_symbolic_links
     install_zsh_syntax_highlighting
     install_zsh_autosuggestions
-    install_powerlevel10k
+    install_fzf
+    # install_powerlevel10k
     install_tpm
     source_zsh_config
     reload_tmux_config
